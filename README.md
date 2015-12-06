@@ -3,6 +3,10 @@
 Tool to store and analyze shopping lists. It's mainly a project to 
 teach myself Clojure.
 
+## Problems
+
+It currently lacks proper tests, configuration and error handling. 
+
 ## Prerequisites
 
 You will need [Leiningen][] 2.0.0 or above installed.
