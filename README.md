@@ -5,7 +5,7 @@ teach myself Clojure.
 
 ## Problems
 
-It currently lacks proper tests, configuration and error handling. 
+It currently lacks proper tests and error handling. 
 
 ## Prerequisites
 

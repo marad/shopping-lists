@@ -1,12 +1,8 @@
 (ns marad.shops.db
-  (:require [clojure.java.jdbc :as sql]))
+  (:require [clojure.java.jdbc :as sql]
+            [marad.shops.config :as config]))
 
-(def db-spec
-  {:classname "com.mysql.jdbc.Driver"
-   :subprotocol "mysql"
-   :subname "//172.17.0.2:3306/shoppinglist"
-   :user "shoppinglist"
-   :password "shoppinglist"})
+(def db-spec (config/get :db-spec))
 
 (defn add-item [item]
   "Inserts item into the database and returns it's id"
