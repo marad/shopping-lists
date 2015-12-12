@@ -4,6 +4,7 @@
 
 (def db-spec (config/get :db-spec))
 
+
 (defn add-item [item]
   "Inserts item into the database and returns it's id"
   (sql/insert! db-spec :items item))
