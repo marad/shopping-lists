@@ -2,32 +2,43 @@
   (:require [marad.shops.db :as db]
             [ring.util.response :refer [response, status]]
             [bouncer.core :as b]
-            [bouncer.validators :refer [string, required, number, positive, integer]]
+            [bouncer.validators :refer [string, required, number, positive, integer, datetime, every]]
+            [clj-time.format :as f]
             ))
 
-(defn validate-item
-  [item]
+(defn validate-item [item]
   (b/validate item
-              :date [required integer positive]
+              :date [required string [datetime (:date f/formatters)]]
               :shop [required string]
               :ware [required string]
               :amount [required number positive]
               :price [required number positive]
               ))
 
-(def example-item {:date 2
-                   :shop "Intermarche"
-                   :ware 21
-                   :amount 12.4
-                   :price 23.2})
-(let [[errors it] (validate-item example-item)]
-  (println errors)
-  (println it))
-
 (defn add-item [item]
   "Adds item to database"
-  (response "ok"))
-  ;(if (item-valid? item)
-  ;  (response (db/add-item item))
-  ;  (status (response {:error "Invalid item"}) 400)
-  ;  ))
+  (let [[errors validated-item] (validate-item item)]
+    (if errors
+      (response errors)
+      (response (db/add-item item)))))
+
+(defn validate-receipt-item [item]
+  (b/validate item
+              :ware [required string]
+              :amount [required number positive]
+              :price [required number positive]))
+
+(defn validate-receipt [receipt]
+  (b/validate receipt
+              :date [required string [datetime (:date f/formatters)]]
+              :shop [required string]
+              :items [required [every validate-receipt-item]]
+              ))
+
+(defn add-receipt [receipt]
+  "Adds multiple items to database"
+  (let [[errors validated-receipt] (validate-receipt receipt)]
+    (if errors
+      (response errors)
+      (response (db/add-receipt receipt)))
+    ))

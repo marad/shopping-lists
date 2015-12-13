@@ -13,8 +13,8 @@
            (GET "/shops" [] (response {:shops (db/list-shops)}))
            (GET "/wares" [] (response {:wares (db/list-wares)}))
            (GET "/items" [] (response {:items (db/list-items)}))
-           ;(POST "/items" {body :body} (db/add-item body))
            (POST "/items" {body :body} (ctrl/add-item body))
+           (POST "/receipt" {body :body} (ctrl/add-receipt body))
            (route/not-found "Not Found"))
 
 (def app
